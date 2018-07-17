@@ -1,0 +1,17 @@
+defaults: &db_2
+  db: #Path to db.tar 
+
+seeds: # For internal use by the regression system. 
+    - SEED
+    - SIID
+
+nodeA: #name
+  <<: *db_2
+  host: "178.128.236.6" #host ip
+  
+nodeB: 
+  <<: *db_2
+  host: "167.99.178.3"
+   
+  
+
