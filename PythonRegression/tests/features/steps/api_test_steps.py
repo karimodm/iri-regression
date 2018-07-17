@@ -2,6 +2,8 @@ from aloe import *
 from iota import Iota
 from iota.commands.core import add_neighbors
 from util import static_vals
+from yaml import load, Loader
+
 
 neighbors = static_vals.TEST_NEIGHBORS
 testHash = static_vals.TEST_HASH
@@ -10,14 +12,42 @@ testTrytes = static_vals.TEST_TRYTES
 config = {}
 responses = {'getNodeInfo':{},'getNeighbors':{},'getTips':{},'getTrytes':{}}   
 
+yamlPaths = ["./tests/features/machine1/config.yml","./tests/features/machine2/config.yml"]
+
+#Configuration
+@before.all
+def configuration():
+    machines = {}    
+    for i in range(len(yamlPaths)):
+        stream = open(yamlPaths[i],'r')
+        machine = load(stream,Loader=Loader)
+        world.seeds = machine.get('seeds')
+    
+        nodes = {}
+        keys = machine.keys()  
+        count = 1     
+        for i in keys:
+            if i != 'seeds' and i != 'defaults':
+                name = i
+                host = machine[i]['host']
+                nodes[name] = host
+
+        machine_tag = 'machine'+str(count)
+        machines[machine_tag] = nodes
+        count += 1
+          
+    world.machines = machines
+
+
 ###
 #Register API call    
-@step(r'"([^"]*)" is called on "([^"]*)"')
-def getNodeInfo_is_called(step,apiCall,nodeName):
+@step(r'"([^"]*)" is called on "([^"]*)" in "([^"]*)"')
+def getNodeInfo_is_called(step,apiCall,nodeName,machine):
     config['apiCall'] = apiCall
     config['nodeId'] = nodeName
+    config['machine'] = machine
      
-    api = prepare_api_call(nodeName)
+    api = prepare_api_call(nodeName,machine)
     
     if apiCall == 'getNodeInfo':
         response = api.get_node_info()
@@ -64,7 +94,7 @@ def compare_response(step):
 
 @step(r'getTrytes is called with the hash static_vals.TEST_HASH')
 def call_getTrytes(step):
-    api = prepare_api_call(config['nodeId'])
+    api = prepare_api_call(config['nodeId'],config['machine'])
     response = api.get_trytes(testHash)
     assert type(response) is dict, "Call may not have responded correctly: \n{}".format(response)
     responses['getTrytes'][config['nodeId']] = response
@@ -79,10 +109,10 @@ def check_trytes(step):
 ###
 #Test Add and Remove Neighbors
   
-@step(r'2 neighbors are added with "([^"]*)" on "([^"]*)"')
-def add_neighbors(step,apiCall,nodeName):
+@step(r'2 neighbors are added with "([^"]*)" on "([^"]*)" in "([^"]*)"')
+def add_neighbors(step,apiCall,nodeName,machine):
     config['nodeId'] = nodeName
-    api = prepare_api_call(nodeName)
+    api = prepare_api_call(nodeName,machine)
     response = api.add_neighbors(neighbors)
     
 @step(r'"getNeighbors" is called, it should return the following neighbors:')
@@ -94,7 +124,7 @@ def check_neighbors_post_addition(step):
     
 @step(r'"removeNeighbors" will be called to remove the same neighbors')
 def remove_neighbors(step):
-    api = prepare_api_call(config['nodeId'])
+    api = prepare_api_call(config['nodeId'],config['machine'])
     response = api.remove_neighbors(neighbors)
     
 @step(r'"getNeighbors" should not return the following neighbors:')
@@ -112,8 +142,8 @@ def check_neighbors_post_removal(step):
                                 
                     
     
-def prepare_api_call(nodeName):
-    host = world.machines[nodeName]
+def prepare_api_call(nodeName,machine):
+    host = world.machines[machine][nodeName]
     address ="http://"+ host + ":14265"
     api = Iota(address)
     return api
@@ -130,7 +160,7 @@ def fetch_response(apiCall):
 
 
 def check_neighbors(step):
-    api = prepare_api_call(config['nodeId'])
+    api = prepare_api_call(config['nodeId'],config['machine'])
     response = api.getNeighbors()
     containsNeighbor = [False,False]
     

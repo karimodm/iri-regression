@@ -5,7 +5,7 @@ Feature: Test API calls on Machine 1
 	
 	@nodeInfo
 	Scenario: GetNodeInfo is called
-		Given "getNodeInfo" is called on "nodeA" 
+		Given "getNodeInfo" is called on "nodeA" in "machine1" 
 		Then a response with the following is returned:
 		|keys								|
 		|appName							|	
@@ -35,7 +35,7 @@ Feature: Test API calls on Machine 1
 		
 	@neighbors
 	Scenario: GetNeighbors is called
-		Given "getNeighbors" is called on "nodeA"
+		Given "getNeighbors" is called on "nodeA" in "machine1"
 		Then a response with the following is returned:
 		|keys							|
 		|address						|
@@ -54,7 +54,7 @@ Feature: Test API calls on Machine 1
 		
 	@getTips	
 	Scenario: GetTips is called
-		Given "getTips" is called on "nodeA"
+		Given "getTips" is called on "nodeA" in "machine1"
 		Then a response with the following is returned:
 		|keys 		|
 		|hashes		|
@@ -82,7 +82,7 @@ Feature: Test API calls on Machine 1
 		
 	@neighbors
 	Scenario: Add and remove Neighbors
-		Given 2 neighbors are added with "addNeighbors" on "nodeA"
+		Given 2 neighbors are added with "addNeighbors" on "nodeA" in "machine1"
 		When "getNeighbors" is called, it should return the following neighbors:
 			|neighbors 				|
 			|178.128.236.6:14600 	|

@@ -1,7 +1,6 @@
 defaults: &db_1
   db: #Path to db.tar 
 
-
 seeds: # For internal use by the regression system. 
     - SEED
     - SIID
