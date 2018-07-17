@@ -70,15 +70,15 @@ Feature: Test API calls on Machine 1
 		Given getTrytes is called with the hash static_vals.TEST_HASH
 		Then the response should be equal to static_vals.TEST_TRYTES
 	
-	
-	@transactionsToApprove	
-	Scenario: GetTransactionsToApprove is called
-		Given "getTransactionsToApprove" is called on "nodeA"
-		Then a response with the following is returned: 
-		|keys				|
-		|trunkTransaction	|
-		|branchTransaction	|
-		|duration			|
+#	
+#	@transactionsToApprove	
+#	Scenario: GetTransactionsToApprove is called
+#		Given "getTransactionsToApprove" is called on "nodeA"
+#		Then a response with the following is returned: 
+#		|keys				|
+#		|trunkTransaction	|
+#		|branchTransaction	|
+#		|duration			|
 		
 	@neighbors
 	Scenario: Add and remove Neighbors

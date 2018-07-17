@@ -73,7 +73,7 @@ def call_getTrytes(step):
 def check_trytes(step):
     response = responses['getTrytes'][config['nodeId']]
     if 'trytes' in response:
-        assert response['trytes'][0] == testTrytes, "Trytes do not match"
+        assert response['trytes'][0] == testTrytes, "Trytes do not match: \n{}".format(response['trytes'][0])
 
 
 ###
