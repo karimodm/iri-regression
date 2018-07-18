@@ -2,24 +2,36 @@ from aloe import step
 from tests.features.steps import api_test_steps
 import os 
 
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
 logConfig = {}
 
 @step(r'a response for "([^"]*)" exists')
 def api_exists(step,apiCall):
+    logger.info('Confirming response exists')
     logConfig['apiCall'] = apiCall
     exists = api_test_steps.check_responses_for_call(apiCall)
+    logger.debug('Response for %s does not exist',apiCall)
     assert exists is True
+    logger.info('Response exists')
  
 @step(r'create the log directory "([^"]*)"')
 def create_log_directory(step,path):
+    logger.info('Creating Log directory %s',path)
     logConfig['logDirPath'] = path
     try:
         os.makedirs(path)
+        logger.info('Log directory created')
     except:
-        print("Path {} already exists".format(path))
+        logger.info('%s already exists',path)
+       
         
 @step(r'log the response to the file "([^"]*)"')
 def create_log_file(step,fileName):
+    logging.info('Attempting to log response in %s',fileName)
     config = setup_logs(fileName)
     file = config[1]
     response = config[0]
@@ -30,13 +42,16 @@ def create_log_file(step,fileName):
         for x in response[i]:
             responseVals += "\t" + x + ": " + str(response[i][x]) + "\n"
         statement = nodeName + ":\n" + responseVals
-        file.write(statement)        
-    
+        logging.debug('Statement to write: %s',statement)
+        file.write(statement)
+                
+    logging.info('Response logged')
     file.close()
     
       
 @step(r'log the neighbor response to the file "([^"]*)"')
 def create_neighbor_log_file(step,fileName):
+    logging.info('Attempting to log response in %s',fileName)
     config = setup_logs(fileName)
     file = config[1]
     response = config[0]
@@ -52,11 +67,16 @@ def create_neighbor_log_file(step,fileName):
                     responseVals += "\n"
                     
         statement = nodeName + ":\n" + responseVals + "\n\n"
+        logging.debug('Statement to write: %s',statement)
         file.write(statement)
-
+    
+    logging.info('Response logged')
+    file.close()
+    
 
 @step(r'log the tips response to the file "([^"]*)"')
 def create_tips_log_file(step,fileName):
+    logging.info('Attempting to log response in %s',fileName)
     config = setup_logs(fileName)
     file = config[1]
     response = config[0]
@@ -80,10 +100,10 @@ def create_tips_log_file(step,fileName):
             else: 
                 responseVals += str(response[i][x])
         statement = nodeName + ":\n" + responseVals
-        print(statement)
-        
+        logging.debug('Statement to write: %s',statement)        
         file.write(statement)        
-
+    
+    logging.info('Response logged')
     file.close()
     
 
@@ -94,11 +114,17 @@ def create_tips_log_file(step,fileName):
 
 
 def setup_logs(fileName):
+    logging.info('Setting up log file')
     path = logConfig['logDirPath'] + fileName
     file = open(path,'w')
-    apiCall = logConfig['apiCall']
+    logging.debug('File path: %s',path)
+   
+    apiCall = logConfig['apiCall'] 
+    logging.info('Fetching %s response', apiCall)
     response = api_test_steps.fetch_response(apiCall)
+    logging.debug('API Response: %s', response)
     config = [response,file]
     
+    logging.info('Log file and response set up')
     return config
 
