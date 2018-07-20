@@ -20,12 +20,14 @@ nodeA: #name
 nodes:
   nodeA: #name
     <<: *db_1
-    host: "178.128.236.6" #host ip
   
-  nodeB: 
+  nodeB:
     <<: *db_1
+<<<<<<< HEAD
     host: "167.99.178.3"
    
 >>>>>>> 50cf92d... Prepared config.yml's for TITB integration
   
 
+=======
+>>>>>>> a53bd67... Adapt cluster config .yml files to new structure
