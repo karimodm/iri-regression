@@ -10,11 +10,6 @@ seeds: # For internal use by the regression system.
 nodes: 
   nodeA: #name
     <<: *db_2
-    host: "167.99.178.3" #placeholder host ip
   
-  nodeB: 
+  nodeB:
     <<: *db_2
-    host: "178.128.236.6" #placeholder host ip
-   
-  
-

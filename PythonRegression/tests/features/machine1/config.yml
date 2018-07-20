@@ -9,11 +9,6 @@ seeds: # For internal use by the regression system.
 nodes:
   nodeA: #name
     <<: *db_1
-    host: "178.128.236.6" #host ip
   
-  nodeB: 
+  nodeB:
     <<: *db_1
-    host: "167.99.178.3"
-   
-  
-
