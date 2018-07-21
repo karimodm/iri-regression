@@ -1,12 +1,31 @@
+<<<<<<< HEAD
+=======
+defaults: &db_1
+  db: #Path to db.tar 
+  db_checksum: #path to db.tar checksum
+
+>>>>>>> 50cf92d... Prepared config.yml's for TITB integration
 seeds: # For internal use by the regression system. 
     - SEED
     - SIID
 
+<<<<<<< HEAD
 nodeA: #name
   host: "178.128.236.6" #host ip
   db: 
   db_checksum: 
   snapshot: "./snapshot.txt" #snapshot path
   snapshot_checksum: "55ab291af8d197f7c16e1b87d3ce96b11f39d903435f37205bea52953c74bbf5" #snapshot checksum
+=======
+nodes:
+  nodeA: #name
+    <<: *db_1
+    host: "178.128.236.6" #host ip
+  
+  nodeB: 
+    <<: *db_1
+    host: "167.99.178.3"
+   
+>>>>>>> 50cf92d... Prepared config.yml's for TITB integration
   
 
