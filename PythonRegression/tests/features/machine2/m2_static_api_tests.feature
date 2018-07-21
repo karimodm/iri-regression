@@ -1,11 +1,11 @@
-@machine1
-Feature: Test API calls on Machine 1
+@machine2
+Feature: Test API calls on Machine 2
 	Test various api calls to make sure they are responding
 	correctly 
 	
 	@nodeInfo
 	Scenario: GetNodeInfo is called
-		Given "getNodeInfo" is called on each node in "machine1" 
+		Given "getNodeInfo" is called on each node in "machine2" 
 		Then a response with the following is returned:
 		|keys								|
 		|appName							|	
@@ -30,12 +30,12 @@ Feature: Test API calls on Machine 1
 	@nodeInfo	
 	Scenario: Log GetNodeInfo
 		Given a response for "getNodeInfo" exists
-		Then create the log directory "./tests/features/machine1/static_test_logs/get_node_info_logs/"
+		Then create the log directory "./tests/features/machine2/static_test_logs/get_node_info_logs/"
 		And log the response to the file "getNodeInfoLog.txt"		 
 		
 	@neighbors
 	Scenario: GetNeighbors is called
-		Given "getNeighbors" is called on each node in "machine1"
+		Given "getNeighbors" is called on each node in "machine2"
 		Then a response with the following is returned:
 		|keys								|
 		|address							|
@@ -49,20 +49,20 @@ Feature: Test API calls on Machine 1
 	@neighbors
 	Scenario: Log GetNeighbors
 		Given a response for "getNeighbors" exists
-		Then create the log directory "./tests/features/machine1/static_test_logs/get_neighbors_logs/"
+		Then create the log directory "./tests/features/machine2/static_test_logs/get_neighbors_logs/"
 		And log the neighbor response to the file "getNeighborsLog.txt"		 
 		
 	@getTips	
 	Scenario: GetTips is called
-		Given "getTips" is called on each node in "machine1"
+		Given "getTips" is called on each node in "machine2"
 		Then a response with the following is returned:
 		|keys 								|
-		|hashes								|	
+		|hashes								|
 		|duration							|
 	@getTips 	
 	Scenario: Log GetTips
 		Given a response for "getTips" exists
-		Then create the log directory "./tests/features/machine1/static_test_logs/get_tips_logs/"
+		Then create the log directory "./tests/features/machine2/static_test_logs/get_tips_logs/"
 		And log the tips response to the file "getTipsLog.txt"
 
 	@getTrytes
@@ -82,7 +82,7 @@ Feature: Test API calls on Machine 1
 		
 	@neighbors
 	Scenario: Add and remove Neighbors
-		Given 2 neighbors are added with "addNeighbors" on each node in "machine1"
+		Given 2 neighbors are added with "addNeighbors" on each node in "machine2"
 		When "getNeighbors" is called, it should return the following neighbor addresses:
 			|neighbors 						|
 			|178.128.236.6:14600 			|
@@ -90,6 +90,6 @@ Feature: Test API calls on Machine 1
 		Then "removeNeighbors" will be called to remove the same neighbors 
 		And "getNeighbors" should not return the following neighbor addresses:
 			|neighbors 						|
-			|178.128.236.6:14600 			|
+			|178.128.236.6:14600 			|	
 			|167.99.178.3:14600				|		
 		

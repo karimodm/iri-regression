@@ -1,11 +1,13 @@
 from aloe import step
 from tests.features.steps import api_test_steps
+from util.test_logic import api_test_logic
 import os 
 
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+tests = api_test_logic
 
 logConfig = {}
 
@@ -13,7 +15,7 @@ logConfig = {}
 def api_exists(step,apiCall):
     logger.info('Confirming response exists')
     logConfig['apiCall'] = apiCall
-    exists = api_test_steps.check_responses_for_call(apiCall)
+    exists = tests.check_responses_for_call(apiCall)
     logger.debug('Response for %s does not exist',apiCall)
     assert exists is True
     logger.info('Response exists')
@@ -108,11 +110,6 @@ def create_tips_log_file(step,fileName):
     
 
 
-
-
-
-
-
 def setup_logs(fileName):
     logging.info('Setting up log file')
     path = logConfig['logDirPath'] + fileName
@@ -121,7 +118,7 @@ def setup_logs(fileName):
    
     apiCall = logConfig['apiCall'] 
     logging.info('Fetching %s response', apiCall)
-    response = api_test_steps.fetch_response(apiCall)
+    response = tests.fetch_response(apiCall)
     logging.debug('API Response: %s', response)
     config = [response,file]
     
