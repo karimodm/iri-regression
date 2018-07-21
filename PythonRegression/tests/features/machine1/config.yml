@@ -1,17 +1,19 @@
 defaults: &db_1
   db: #Path to db.tar 
+  db_checksum: #path to db.tar checksum
 
 seeds: # For internal use by the regression system. 
     - SEED
     - SIID
 
-nodeA: #name
-  <<: *db_1
-  host: "178.128.236.6" #host ip
+nodes:
+  nodeA: #name
+    <<: *db_1
+    host: "178.128.236.6" #host ip
   
-nodeB: 
-  <<: *db_1
-  host: "167.99.178.3"
+  nodeB: 
+    <<: *db_1
+    host: "167.99.178.3"
    
   
 
