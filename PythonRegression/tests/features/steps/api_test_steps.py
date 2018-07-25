@@ -148,6 +148,9 @@ def add_neighbors(step,apiCall,machine):
         api = tests.prepare_api_call(node,machine)
         response = api.add_neighbors(neighbors)
         logger.debug('Addition response: %s',response)
+<<<<<<< HEAD
+>>>>>>> 7c3e68d... Integrated ci glue code with test configuration
+=======
 >>>>>>> 7c3e68d... Integrated ci glue code with test configuration
     
 @step(r'"getNeighbors" is called, it should return the following neighbors:')
@@ -169,6 +172,9 @@ def remove_neighbors(step):
         api = tests.prepare_api_call(node,config['machine'])
         response = api.remove_neighbors(neighbors)
         logger.debug('Removal response: %s',response)
+<<<<<<< HEAD
+>>>>>>> 7c3e68d... Integrated ci glue code with test configuration
+=======
 >>>>>>> 7c3e68d... Integrated ci glue code with test configuration
     
 @step(r'"getNeighbors" should not return the following neighbors:')
