@@ -2,7 +2,7 @@
 
 set -x
 
-DOCKER_REGISTRY=karimo/iri-network-tests
+DOCKER_REGISTRY=dyrellc/iri-network-tests
 ERROR=0
 
 git clone --depth 1 --branch yaml_configuration https://github.com/karimodm/iri-network-tests.git iri-network-tests
@@ -28,12 +28,13 @@ REVISION_HASH=$(grep -F 'revision_hash:' $machine_dir/output.yml | cut -d' ' -f2
 deactivate
 
 if [ $ERROR -eq 0 ]; then
-
   echo "Starting tests..."
-  ###
-  #RUN ALOE TESTS HERE
-  ###
-
+  for machine_dir in tests/features/machine?;do
+    for feature in $machine_dir/*.feature; do
+      echo $feature
+      aloe $feature --nologcapture -v
+    done
+  done
 fi
 
 timeout 10 iri-network-tests/teardown_cluster.sh -r $REVISION_HASH
