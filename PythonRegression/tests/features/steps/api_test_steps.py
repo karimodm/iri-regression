@@ -1,11 +1,25 @@
 from aloe import *
-from iota import Iota
+from iota import Iota,ProposedTransaction,Address,Tag,TryteString,BundleHash
 from iota.commands.core import add_neighbors
 from util import static_vals
+<<<<<<< HEAD
+=======
+from util.test_logic import api_test_logic
+from yaml import load, Loader
+from time import sleep
+
+import logging 
+from iota.transaction.creation import ProposedTransaction
+from iota.types import TryteString
+from util.test_logic.api_test_logic import prepare_api_call
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+>>>>>>> 31a50a9... Added Transaction Broadcast Tests
 
 neighbors = static_vals.TEST_NEIGHBORS
 testHash = static_vals.TEST_HASH
 testTrytes = static_vals.TEST_TRYTES
+testAddress = static_vals.TEST_ADDRESS
 
 config = {}
 <<<<<<< HEAD
@@ -37,8 +51,9 @@ def configuration():
                     name = x
                     host = machine[i][x]['host']
                     port = machine[i][x]['ports']['api']
+                    udpPort = machine[i][x]['ports']['gossip-udp']
                     logger.info(host + ":" + str(port))
-                    nodes_final[name] = {'host': host, 'port': str(port)}
+                    nodes_final[name] = {'host': host, 'port': str(port), 'udpPort': str(udpPort)}
                     logger.info('%s configured', name)
 
         machine_tag = 'machine'+str(count)
@@ -56,14 +71,23 @@ def configuration():
 @step(r'"([^"]*)" is called on "([^"]*)"')
 def getNodeInfo_is_called(step,apiCall,nodeName):
     config['apiCall'] = apiCall
+<<<<<<< HEAD
     config['nodeId'] = nodeName
+=======
+    config['nodeId'] = []
+    responses[apiCall][machine] = {}
+
+    for i in world.machines[machine]:
+        logger.info('Node: %s',i)
+        config['nodeId'].append(i)        
+>>>>>>> 31a50a9... Added Transaction Broadcast Tests
      
 <<<<<<< HEAD
     api = prepare_api_call(nodeName)
 =======
         api = tests.prepare_api_call(i,machine)
         
-        logger.info('Assigning call list...')
+        logger.debug('Assigning call list...')
         
         callList = {
             'getNodeInfo': api.get_node_info,
@@ -95,6 +119,7 @@ def compare_response(step):
     keys = step.hashes
     nodeId = config['nodeId']
     apiCall = config['apiCall']
+<<<<<<< HEAD
     
     if apiCall == 'getNodeInfo' or apiCall == 'getTransactionsToApprove':
         response = responses['getNodeInfo'][nodeId]
@@ -102,6 +127,25 @@ def compare_response(step):
         responseKeys.sort()
         for i in range(len(response)):
             assert str(responseKeys[i]) == str(keys[i]['keys']), "There was an error with the response" 
+=======
+    machine = config['machine']    
+    ###
+    if apiCall == 'getNodeInfo' or apiCall == 'getTransactionsToApprove':
+        response_list = responses[apiCall][machine]
+        for i in response_list:
+            response = responses[apiCall][machine][i]
+            responseKeys = list(response.keys())
+            responseKeys.sort()
+        
+            keyList = []
+            for y in range(len(keys)):
+                keyList.append(keys[y]['keys'])
+        
+            keyList.sort()
+            
+            for x in range(len(response)):
+                assert str(responseKeys[x]) == str(keyList[x]), "There was an error with the response" 
+>>>>>>> 31a50a9... Added Transaction Broadcast Tests
     
     elif apiCall == 'getNeighbors' or apiCall == 'getTips':
         response = responses['getNeighbors'][nodeId] 
@@ -184,12 +228,110 @@ def check_neighbors_post_removal(step):
     assert containsNeighbor[0] is False
             
  
+
+
+###
+#Test transactions
+
+@step(r'"([^"]*)" and "([^"]*)" in "([^"]*)" are neighbors')
+def make_neighbors(step,node1,node2,machine):
+    config['machine'] = machine
+    host1 = world.machines[machine][node1]['host']
+    port1 = world.machines[machine][node1]['udpPort']
+    host2 = world.machines[machine][node2]['host']
+    port2 = world.machines[machine][node2]['udpPort']
     
+    hosts = [host1,host2]
+    ports = [port1,port2]
     
-      
+    api1 = prepare_api_call(node1,machine)
+    api2 = prepare_api_call(node2,machine)
+        
+    response1 = api1.get_neighbors()
+    response2 = api2.get_neighbors()
+    neighbors1 = list(response1['neighbors'])
+    neighbors2 = list(response2['neighbors'])
+    host = hosts[0]
+    port = ports[0]
+    address1 = "udp://" + str(host) + ":" + port     
+    host = hosts[1]
+    port = ports[1]
+    address2 = "udp://" + str(host) + ":" + port 
+    
+    logger.info(address1)
+    logger.info(address2)
+    logger.info("Checking if nodes are paired")
+    
+    containsNeighbor = False
+    for neighbor in range(len(neighbors1)):
+        if neighbors1[neighbor]['address']:
+            containsNeighbor = True
+            logger.info("Neighbor found")
+
+    
+    if containsNeighbor == False:
+        resp = api1.add_neighbors([address2])
+        resp2 = api2.add_neighbors([address1])
+        logger.info("Nodes paired")
+    
+        
+    containsNeighbor = False
+    for neighbor in range(len(neighbors2)):
+        if neighbors2[neighbor]['address']:
+            containsNeighbor = True 
+            logger.info("Neighbor found")
+
+    if containsNeighbor == False:
+        resp = api2.add_neighbors([address1])
+        resp2 = api1.add_neighbors([address2]) 
+        logger.info("Nodes paired")
+        
+        
+    response = api1.get_neighbors()
+    logger.info(response)
+    response = api2.get_neighbors()
+    logger.info(response)
+        
+     
+@step(r'a transaction with the tag "([^"]*)" is sent from "([^"]*)"')
+def send_transaction(step,tag,nodeName):
+    logger.info('Preparing Transaction...')
+    logger.info('Node: %s',nodeName)
+    machine = config['machine']
+    config['tag'] = tag
+    api = tests.prepare_api_call(nodeName,machine)  
+    txn = \
+        ProposedTransaction(
+            address = 
+            Address(testAddress),
+            
+            message = TryteString.from_unicode('Test Transaction propagation'),
+            tag = Tag(tag),
+            value = 0,
+            )
+    
+    logger.info("Sending Transaction...")
+    txn_sent = api.send_transfer(depth=3, transfers=[txn])
+    logger.info("Giving the transaction time to propagate...")
+    sleep(10)
+   
+   
+@step(r'findTransaction is called with the same tag on "([^"]*)"')
+def find_transaction_is_called(step,nodeName):
+    logger.info(nodeName)
+    api = tests.prepare_api_call(nodeName, config['machine'])    
+    logger.info("Searching for Transaction")
+    response = api.find_transactions(tags=[config['tag']])    
+    config['findTransactionResponse'] = response
+    
+@step(r'the Transaction should be found')
+def check_transaction_response(step):
+    logger.info("Checking response...")
+    response = config['findTransactionResponse']
+    assert len(response['hashes']) != 0, 'Transaction not found'
+    logger.info("Response found")
   
-  
-                                
+                                  
                     
     
 def prepare_api_call(nodeName):

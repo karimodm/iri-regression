@@ -30,11 +30,12 @@ deactivate
 if [ $ERROR -eq 0 ]; then
   echo "Starting tests..."
   for machine_dir in tests/features/machine?;do
-    for feature in $machine_dir/*.feature; do
-      echo $feature
-      aloe $feature --nologcapture -v
+   for feature in $machine_dir/*.feature; do
+     echo $feature
+     aloe $feature --nologcapture -v
     done
   done
+#  aloe -a transactionDemo --nologcapture -v
 fi
 
 timeout 10 iri-network-tests/teardown_cluster.sh -r $REVISION_HASH
