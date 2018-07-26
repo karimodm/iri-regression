@@ -7,6 +7,7 @@ ERROR=0
 
 git clone --depth 1 --branch yaml_configuration https://github.com/karimodm/iri-network-tests.git iri-network-tests
 cd iri-network-tests
+git pull
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
