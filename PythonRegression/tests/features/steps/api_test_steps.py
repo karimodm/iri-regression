@@ -20,6 +20,11 @@ neighbors = static_vals.TEST_NEIGHBORS
 testHash = static_vals.TEST_HASH
 testTrytes = static_vals.TEST_TRYTES
 testAddress = static_vals.TEST_ADDRESS
+<<<<<<< HEAD
+=======
+
+tests = api_test_logic
+>>>>>>> c0bd5fb... Merge remote-tracking branch 'upstream/glue' into glue
 
 config = {}
 <<<<<<< HEAD
@@ -80,7 +85,10 @@ def getNodeInfo_is_called(step,apiCall,nodeName):
     for i in world.machines[machine]:
         logger.info('Node: %s',i)
         config['nodeId'].append(i)        
+<<<<<<< HEAD
 >>>>>>> 31a50a9... Added Transaction Broadcast Tests
+=======
+>>>>>>> c0bd5fb... Merge remote-tracking branch 'upstream/glue' into glue
      
 <<<<<<< HEAD
     api = prepare_api_call(nodeName)
@@ -145,7 +153,10 @@ def compare_response(step):
             
             for x in range(len(response)):
                 assert str(responseKeys[x]) == str(keyList[x]), "There was an error with the response" 
+<<<<<<< HEAD
 >>>>>>> 31a50a9... Added Transaction Broadcast Tests
+=======
+>>>>>>> c0bd5fb... Merge remote-tracking branch 'upstream/glue' into glue
     
     elif apiCall == 'getNeighbors' or apiCall == 'getTips':
         response = responses['getNeighbors'][nodeId] 
@@ -193,9 +204,12 @@ def add_neighbors(step,apiCall,machine):
         response = api.add_neighbors(neighbors)
         logger.debug('Addition response: %s',response)
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 7c3e68d... Integrated ci glue code with test configuration
 =======
 >>>>>>> 7c3e68d... Integrated ci glue code with test configuration
+=======
+>>>>>>> c0bd5fb... Merge remote-tracking branch 'upstream/glue' into glue
     
 @step(r'"getNeighbors" is called, it should return the following neighbors:')
 def check_neighbors_post_addition(step):
@@ -217,9 +231,12 @@ def remove_neighbors(step):
         response = api.remove_neighbors(neighbors)
         logger.debug('Removal response: %s',response)
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 7c3e68d... Integrated ci glue code with test configuration
 =======
 >>>>>>> 7c3e68d... Integrated ci glue code with test configuration
+=======
+>>>>>>> c0bd5fb... Merge remote-tracking branch 'upstream/glue' into glue
     
 @step(r'"getNeighbors" should not return the following neighbors:')
 def check_neighbors_post_removal(step):
