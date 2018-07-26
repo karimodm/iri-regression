@@ -18,10 +18,11 @@ for machine_dir in tests/features/machine?; do
   if [ $? -ne 0 ]; then
     ERROR=1
     python <<EOF
+from __future__ import print_function
 import yaml
 for (key,value) in yaml.load(open('$machine_dir/output.yml'))['nodes'].iteritems():
   if value['status'] == 'Error':
-    print value['log']
+    print(value['log'])
 EOF
   fi
 done
