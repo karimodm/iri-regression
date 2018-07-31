@@ -26,19 +26,21 @@ for (key,value) in yaml.load(open('$machine_dir/output.yml'))['nodes'].iteritems
 EOF
   fi
 done
+
 REVISION_HASH=$(grep -F 'revision_hash:' $machine_dir/output.yml | cut -d' ' -f2)
-deactivate
+
+pip install -e .
 
 if [ $ERROR -eq 0 ]; then
-  echo "Starting tests..."
+  echo "Starting tests..." 
   for machine_dir in tests/features/machine?;do
    for feature in $machine_dir/*.feature; do
-     echo $feature
-     aloe $feature --nologcapture -v
+     aloe $feature -v --nologcapture
     done
   done
-#  aloe -a transactionDemo --nologcapture -v
 fi
+
+deactivate
 
 timeout 10 iri-network-tests/teardown_cluster.sh -r $REVISION_HASH
 exit $ERROR

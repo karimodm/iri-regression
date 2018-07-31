@@ -1,6 +1,5 @@
-from aloe import *
-from iota import Iota,ProposedTransaction,Address,Tag,TryteString,BundleHash
-from iota.commands.core import add_neighbors
+from aloe import step,world,before
+from iota import *
 from util import static_vals
 <<<<<<< HEAD
 =======
@@ -9,19 +8,25 @@ from yaml import load, Loader
 from time import sleep
 
 import logging 
-from iota.transaction.creation import ProposedTransaction
-from iota.types import TryteString
-from util.test_logic.api_test_logic import prepare_api_call
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 >>>>>>> 31a50a9... Added Transaction Broadcast Tests
 
+<<<<<<< HEAD
 neighbors = static_vals.TEST_NEIGHBORS
 testHash = static_vals.TEST_HASH
 testTrytes = static_vals.TEST_TRYTES
 testAddress = static_vals.TEST_ADDRESS
 <<<<<<< HEAD
 =======
+=======
+static = static_vals
+
+neighbors = static.TEST_NEIGHBORS
+testHash = static.TEST_HASH
+testTrytes = static.TEST_TRYTES
+testAddress = static.TEST_ADDRESS
+>>>>>>> 3b816d6... Tests now run from ciglue correctly
 
 tests = api_test_logic
 >>>>>>> c0bd5fb... Merge remote-tracking branch 'upstream/glue' into glue
@@ -34,8 +39,6 @@ responses = {'getNodeInfo':{},'getNeighbors':{},'getTips':{},'getTransactionsToA
 
 yamlPaths = ["./tests/features/machine1/output.yml","./tests/features/machine2/output.yml"]
 
-
-
 #Configuration
 @before.all
 def configuration():
@@ -45,8 +48,7 @@ def configuration():
     for i in range(len(yamlPaths)):
         stream = open(yamlPaths[i],'r')
         machine = load(stream,Loader=Loader)
-        world.seeds = machine.get('seeds')
-    
+        world.seeds = machine.get('seeds')  
         nodes_final = {}
         keys = machine.keys()   
         logger.debug('Keys: %s',keys) 
@@ -81,7 +83,7 @@ def getNodeInfo_is_called(step,apiCall,nodeName):
 =======
     config['nodeId'] = []
     responses[apiCall][machine] = {}
-
+    
     for i in world.machines[machine]:
         logger.info('Node: %s',i)
         config['nodeId'].append(i)        
@@ -125,7 +127,6 @@ def getNodeInfo_is_called(step,apiCall,nodeName):
 @step(r'a response with the following is returned:')
 def compare_response(step):
     keys = step.hashes
-    nodeId = config['nodeId']
     apiCall = config['apiCall']
 <<<<<<< HEAD
     
@@ -168,8 +169,15 @@ def compare_response(step):
             except:
                 print("No neighbors to verify response with")        
  
+<<<<<<< HEAD
  ###
  #Test GetTrytes 
+=======
+    logger.info('Response Validated')
+    
+###
+#Test GetTrytes 
+>>>>>>> 3b816d6... Tests now run from ciglue correctly
 
 @step(r'getTrytes is called with the hash static_vals.TEST_HASH')
 def call_getTrytes(step):
@@ -196,11 +204,12 @@ def add_neighbors(step,apiCall,nodeName):
     response = api.add_neighbors(neighbors)
 =======
 @step(r'2 neighbors are added with "([^"]*)" on each node in "([^"]*)"')
-def add_neighbors(step,apiCall,machine):
+def add_neighbors_to_nodes(step,apiCall,machine):
     logger.info('Adding neighbors')
     config['nodeId'] = world.machines[machine]
     for node in config['nodeId']:
         api = tests.prepare_api_call(node,machine)
+        logger.info("Neighbors: %s",neighbors)
         response = api.add_neighbors(neighbors)
         logger.debug('Addition response: %s',response)
 <<<<<<< HEAD
@@ -261,22 +270,16 @@ def make_neighbors(step,node1,node2,machine):
     hosts = [host1,host2]
     ports = [port1,port2]
     
-    api1 = prepare_api_call(node1,machine)
-    api2 = prepare_api_call(node2,machine)
+    api1 = tests.prepare_api_call(node1,machine)
+    api2 = tests.prepare_api_call(node2,machine)
         
     response1 = api1.get_neighbors()
     response2 = api2.get_neighbors()
     neighbors1 = list(response1['neighbors'])
     neighbors2 = list(response2['neighbors'])
-    host = hosts[0]
-    port = ports[0]
-    address1 = "udp://" + str(host) + ":" + port     
-    host = hosts[1]
-    port = ports[1]
-    address2 = "udp://" + str(host) + ":" + port 
+    address1 = "udp://" + str(hosts[0]) + ":" + ports[0]     
+    address2 = "udp://" + str(hosts[1]) + ":" + ports[1] 
     
-    logger.info(address1)
-    logger.info(address2)
     logger.info("Checking if nodes are paired")
     
     containsNeighbor = False
@@ -287,8 +290,8 @@ def make_neighbors(step,node1,node2,machine):
 
     
     if containsNeighbor == False:
-        resp = api1.add_neighbors([address2])
-        resp2 = api2.add_neighbors([address1])
+        api1.add_neighbors([address2])
+        api2.add_neighbors([address1])
         logger.info("Nodes paired")
     
         
@@ -299,8 +302,8 @@ def make_neighbors(step,node1,node2,machine):
             logger.info("Neighbor found")
 
     if containsNeighbor == False:
-        resp = api2.add_neighbors([address1])
-        resp2 = api1.add_neighbors([address2]) 
+        api2.add_neighbors([address1])
+        api1.add_neighbors([address2]) 
         logger.info("Nodes paired")
         
         
@@ -328,7 +331,7 @@ def send_transaction(step,tag,nodeName):
             )
     
     logger.info("Sending Transaction...")
-    txn_sent = api.send_transfer(depth=3, transfers=[txn])
+    api.send_transfer(depth=3, transfers=[txn])
     logger.info("Giving the transaction time to propagate...")
     sleep(10)
    
@@ -336,7 +339,7 @@ def send_transaction(step,tag,nodeName):
 @step(r'findTransaction is called with the same tag on "([^"]*)"')
 def find_transaction_is_called(step,nodeName):
     logger.info(nodeName)
-    api = tests.prepare_api_call(nodeName, config['machine'])    
+    api = tests.prepare_api_call(nodeName, config['machine']) 
     logger.info("Searching for Transaction")
     response = api.find_transactions(tags=[config['tag']])    
     config['findTransactionResponse'] = response
@@ -346,8 +349,11 @@ def check_transaction_response(step):
     logger.info("Checking response...")
     response = config['findTransactionResponse']
     assert len(response['hashes']) != 0, 'Transaction not found'
-    logger.info("Response found")
+    logger.info("Response found")  
+
   
+    
+    
                                   
                     
     

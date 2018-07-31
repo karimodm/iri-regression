@@ -1,5 +1,10 @@
 from aloe import step
+<<<<<<< HEAD
 from tests.features.steps import api_test_steps
+=======
+from aloe import step
+from util.test_logic import api_test_logic
+>>>>>>> 3b816d6... Tests now run from ciglue correctly
 import os 
 
 logConfig = {}
@@ -16,8 +21,14 @@ def create_log_directory(step,path):
     try:
         os.makedirs(path)
     except:
+<<<<<<< HEAD
         print("Path {} already exists".format(path))
         
+=======
+        logger.info('%s already exists',path)
+       
+       
+>>>>>>> 3b816d6... Tests now run from ciglue correctly
 @step(r'log the response to the file "([^"]*)"')
 def create_log_file(step,fileName):
     config = setup_logs(fileName)
@@ -70,11 +81,11 @@ def create_tips_log_file(step,fileName):
                     #Maximum 250 entries for the log
                     responseVals += "\n"
                     if len(response[i][x]) > 250:
-                        max = 250
+                        maxVal = 250
                     else: 
-                        max = len(response[i][x])
+                        maxVal = len(response[i][x])
                     
-                    for y in range(max):
+                    for y in range(maxVal):
                         responseVals += "\t\tTip: " + str(response[i][x][y]) + "\n"
                        
             else: 

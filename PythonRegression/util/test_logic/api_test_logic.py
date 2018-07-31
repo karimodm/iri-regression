@@ -1,12 +1,11 @@
 from aloe import world
 from iota import Iota
-from tests.features.steps import api_test_steps 
 
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-steps = api_test_steps
+
 
 def prepare_api_call(nodeName,machine):
     logger.info('Preparing api call')
@@ -19,16 +18,19 @@ def prepare_api_call(nodeName,machine):
 
 
 def check_responses_for_call(apiCall):
+    steps = import_steps()
     if len(steps.responses[apiCall][steps.config['machine']]) > 0:
         return True
     else:
         return False
     
 def fetch_response(apiCall):
+    steps = import_steps()
     return steps.responses[apiCall][steps.config['machine']]
 
 
 def check_neighbors(step,node):
+    steps = import_steps()
     api = prepare_api_call(node,steps.config['machine'])
     response = api.getNeighbors()
     logger.info('Response: %s',response)
@@ -44,4 +46,8 @@ def check_neighbors(step,node):
                     containsNeighbor[1] = True  
     
     return containsNeighbor
+
+def import_steps():
+    import tests.features.steps.api_test_steps as steps
+    return steps
      
