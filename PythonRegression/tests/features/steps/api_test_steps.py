@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from aloe import step,world,before
 from iota import *
 from util import static_vals
@@ -11,11 +12,18 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 >>>>>>> 31a50a9... Added Transaction Broadcast Tests
+=======
+from aloe import *
+from iota import Iota
+from iota.commands.core import add_neighbors
+from util import static_vals
+>>>>>>> parent of 33a099b... Added Transaction Broadcast Tests
 
 <<<<<<< HEAD
 neighbors = static_vals.TEST_NEIGHBORS
 testHash = static_vals.TEST_HASH
 testTrytes = static_vals.TEST_TRYTES
+<<<<<<< HEAD
 testAddress = static_vals.TEST_ADDRESS
 <<<<<<< HEAD
 =======
@@ -30,6 +38,8 @@ testAddress = static.TEST_ADDRESS
 
 tests = api_test_logic
 >>>>>>> c0bd5fb... Merge remote-tracking branch 'upstream/glue' into glue
+=======
+>>>>>>> parent of 33a099b... Added Transaction Broadcast Tests
 
 config = {}
 <<<<<<< HEAD
@@ -58,9 +68,8 @@ def configuration():
                     name = x
                     host = machine[i][x]['host']
                     port = machine[i][x]['ports']['api']
-                    udpPort = machine[i][x]['ports']['gossip-udp']
                     logger.info(host + ":" + str(port))
-                    nodes_final[name] = {'host': host, 'port': str(port), 'udpPort': str(udpPort)}
+                    nodes_final[name] = {'host': host, 'port': str(port)}
                     logger.info('%s configured', name)
 
         machine_tag = 'machine'+str(count)
@@ -78,8 +87,8 @@ def configuration():
 @step(r'"([^"]*)" is called on "([^"]*)"')
 def getNodeInfo_is_called(step,apiCall,nodeName):
     config['apiCall'] = apiCall
-<<<<<<< HEAD
     config['nodeId'] = nodeName
+<<<<<<< HEAD
 =======
     config['nodeId'] = []
     responses[apiCall][machine] = {}
@@ -91,13 +100,15 @@ def getNodeInfo_is_called(step,apiCall,nodeName):
 >>>>>>> 31a50a9... Added Transaction Broadcast Tests
 =======
 >>>>>>> c0bd5fb... Merge remote-tracking branch 'upstream/glue' into glue
+=======
+>>>>>>> parent of 33a099b... Added Transaction Broadcast Tests
      
 <<<<<<< HEAD
     api = prepare_api_call(nodeName)
 =======
         api = tests.prepare_api_call(i,machine)
         
-        logger.debug('Assigning call list...')
+        logger.info('Assigning call list...')
         
         callList = {
             'getNodeInfo': api.get_node_info,
@@ -128,7 +139,6 @@ def getNodeInfo_is_called(step,apiCall,nodeName):
 def compare_response(step):
     keys = step.hashes
     apiCall = config['apiCall']
-<<<<<<< HEAD
     
     if apiCall == 'getNodeInfo' or apiCall == 'getTransactionsToApprove':
         response = responses['getNodeInfo'][nodeId]
@@ -136,6 +146,7 @@ def compare_response(step):
         responseKeys.sort()
         for i in range(len(response)):
             assert str(responseKeys[i]) == str(keys[i]['keys']), "There was an error with the response" 
+<<<<<<< HEAD
 =======
     machine = config['machine']    
     ###
@@ -158,6 +169,8 @@ def compare_response(step):
 >>>>>>> 31a50a9... Added Transaction Broadcast Tests
 =======
 >>>>>>> c0bd5fb... Merge remote-tracking branch 'upstream/glue' into glue
+=======
+>>>>>>> parent of 33a099b... Added Transaction Broadcast Tests
     
     elif apiCall == 'getNeighbors' or apiCall == 'getTips':
         response = responses['getNeighbors'][nodeId] 
@@ -254,22 +267,9 @@ def check_neighbors_post_removal(step):
     assert containsNeighbor[0] is False
             
  
-
-
-###
-#Test transactions
-
-@step(r'"([^"]*)" and "([^"]*)" in "([^"]*)" are neighbors')
-def make_neighbors(step,node1,node2,machine):
-    config['machine'] = machine
-    host1 = world.machines[machine][node1]['host']
-    port1 = world.machines[machine][node1]['udpPort']
-    host2 = world.machines[machine][node2]['host']
-    port2 = world.machines[machine][node2]['udpPort']
     
-    hosts = [host1,host2]
-    ports = [port1,port2]
     
+<<<<<<< HEAD
     api1 = tests.prepare_api_call(node1,machine)
     api2 = tests.prepare_api_call(node2,machine)
         
@@ -355,6 +355,12 @@ def check_transaction_response(step):
     
     
                                   
+=======
+      
+  
+  
+                                
+>>>>>>> parent of 33a099b... Added Transaction Broadcast Tests
                     
     
 def prepare_api_call(nodeName):

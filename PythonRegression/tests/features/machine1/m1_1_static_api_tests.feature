@@ -73,8 +73,11 @@ Feature: Test API calls on Machine 1
 	
 	@transactionsToApprove	
 	Scenario: GetTransactionsToApprove is called
+<<<<<<< HEAD
 <<<<<<< HEAD:PythonRegression/tests/features/machine1/m1_1_static_api_tests.feature
 <<<<<<< HEAD
+=======
+>>>>>>> parent of 33a099b... Added Transaction Broadcast Tests
 		Given "getTransactionsToApprove" is called on "nodeA"
 		Then a response with the following is returned: 
 		|keys				|
@@ -94,6 +97,7 @@ Feature: Test API calls on Machine 1
 			|neighbors 				|
 			|178.128.236.6:14600 	|
 			|167.99.178.3:14600		|		
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> c0bd5fb... Merge remote-tracking branch 'upstream/glue' into glue:PythonRegression/tests/features/machine1/m1_1_static_api_tests.feature
@@ -132,4 +136,6 @@ Feature: Test API calls on Machine 1
 >>>>>>> 31a50a9... Added Transaction Broadcast Tests
 =======
 >>>>>>> c0bd5fb... Merge remote-tracking branch 'upstream/glue' into glue:PythonRegression/tests/features/machine1/m1_1_static_api_tests.feature
+=======
+>>>>>>> parent of 33a099b... Added Transaction Broadcast Tests
 		
