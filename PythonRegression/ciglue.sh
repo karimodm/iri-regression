@@ -34,14 +34,9 @@ pip install -e .
 if [ $ERROR -eq 0 ]; then
   echo "Starting tests..." 
   for machine_dir in tests/features/machine?;do
-<<<<<<< HEAD
    for feature in $machine_dir/*.feature; do
      aloe $feature -v --nologcapture
-=======
-    for feature in $machine_dir/*.feature; do
-      echo $feature
-      aloe $feature --nologcapture -v
->>>>>>> parent of 33a099b... Added Transaction Broadcast Tests
+
     done
   done
 fi

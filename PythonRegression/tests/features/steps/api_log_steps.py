@@ -1,10 +1,6 @@
 from aloe import step
-<<<<<<< HEAD
 from tests.features.steps import api_test_steps
-=======
-from aloe import step
 from util.test_logic import api_test_logic
->>>>>>> 3b816d6... Tests now run from ciglue correctly
 import os 
 
 logConfig = {}
@@ -21,14 +17,8 @@ def create_log_directory(step,path):
     try:
         os.makedirs(path)
     except:
-<<<<<<< HEAD
         print("Path {} already exists".format(path))
         
-=======
-        logger.info('%s already exists',path)
-       
-       
->>>>>>> 3b816d6... Tests now run from ciglue correctly
 @step(r'log the response to the file "([^"]*)"')
 def create_log_file(step,fileName):
     config = setup_logs(fileName)

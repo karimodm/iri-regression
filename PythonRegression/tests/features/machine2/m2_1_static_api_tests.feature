@@ -70,7 +70,6 @@ Feature: Test API calls on Machine 2
 		Given getTrytes is called with the hash static_vals.TEST_HASH
 		Then the response should be equal to static_vals.TEST_TRYTES
 	
-<<<<<<< HEAD
 	
 	@transactionsToApprove	
  	Scenario: GetTransactionsToApprove is called
@@ -80,17 +79,7 @@ Feature: Test API calls on Machine 2
 		|trunkTransaction					|
 		|branchTransaction					|
 		|duration							|
-=======
-#	
-#	@transactionsToApprove	
-#	Scenario: GetTransactionsToApprove is called
-#		Given "getTransactionsToApprove" is called on "nodeA"
-#		Then a response with the following is returned: 
-#		|keys								|
-#		|trunkTransaction					|
-#		|branchTransaction					|
-#		|duration							|
->>>>>>> parent of 33a099b... Added Transaction Broadcast Tests
+
 		
 	@neighbors
 	Scenario: Add and remove Neighbors
