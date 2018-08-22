@@ -90,22 +90,22 @@ def compare_response(step):
     machine = config['machine']
     
     if apiCall == 'getNodeInfo' or apiCall == 'getTransactionsToApprove':
-        response = responses['getNodeInfo'][machine][nodeId]
+        response = responses[apiCall][machine][nodeId]
         responseKeys = list(response.keys())
         responseKeys.sort()
         logger.debug('Response Keys: %s', responseKeys)
-        for i in range(len(response)):
-            assert str(responseKeys[i]) == str(keys[i]['keys']), "There was an error with the response" 
+        for response_key_val in range(len(response)):
+            assert str(responseKeys[response_key_val]) == str(keys[response_key_val]['keys']), "There was an error with the response" 
     
     elif apiCall == 'getNeighbors' or apiCall == 'getTips':
-        response = responses['getNeighbors'][machine][nodeId] 
-        responseKeys = list(response.keys())
+        responseList = responses[apiCall][machine][nodeId] 
+        responseKeys = list(responseList.keys())
         logger.debug('Response Keys: %s', responseKeys)
-
-        for x in range(len(response)):
+        
+        for responseNumber in range(len(responseList)):
             try:
-                for i in range(len(response[x])):
-                    assert str(responseKeys[i]) == str(keys[i])
+                for responseKeyVal in range(len(responseList[responseNumber])):
+                    assert str(responseKeys[responseKeyVal]) == str(keys[responseKeyVal])
             except:
                 logger.debug("No values to verify response with")        
  
@@ -176,7 +176,7 @@ def check_neighbors_post_removal(step):
       
   
   
-                                
+    
                     
     
 def prepare_api_call(nodeName):
