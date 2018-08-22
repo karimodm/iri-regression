@@ -34,10 +34,8 @@ pip install -e .
 if [ $ERROR -eq 0 ]; then
   echo "Starting tests..." 
   for machine_dir in tests/features/machine?;do
-   for feature in $machine_dir/*.feature; do
-     aloe $feature -v --nologcapture
-
-    done
+   mapfile -t FEATURES < <(find $machine_dir -type f -name "*.feature") 
+   aloe ${FEATURES} -v --nologcapture -w $machine_dir
   done
 fi
 
